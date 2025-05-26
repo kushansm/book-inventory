@@ -1,56 +1,86 @@
+
 # 📚 Book Inventory Management System
 
-A full-stack MERN (MongoDB, Express.js, React.js, Node.js) application to manage a book inventory with:
-
-- ✅ User Authentication (Login/Signup)
-- ✅ Add / Edit / Delete Books
-- ✅ Paginated List with Search
-- ✅ Image Upload (Cloudinary or Local)
-- ✅ Basic Dashboard & Analytics
+A full-stack **MERN** (MongoDB, Express.js, React.js, Node.js) application to manage a book inventory.
 
 ---
 
-## 🔧 Tech Stack
+## ✅ Features
 
-| Frontend   | Backend     | Database     | Others               |
-|------------|-------------|--------------|----------------------|
-| React (Vite) | Express.js | MongoDB Atlas | JWT, Multer, Cloudinary |
-| React Router | Node.js     | Mongoose     | Dotenv, CORS, bcrypt |
+- 📝 Add New Books with Title, Author, Price
+- ✏️ Edit Existing Book Details
+- 🗑️ Delete Books with Confirmation Modal
+- 🔍 Search Books by ID
+- 📃 Paginated List of All Books
+- 🖼️ Image Upload Support via Cloudinary (or local option)
+- 📊 Dashboard & Analytics (Planned/Upcoming)
+
+<!-- > 🔐 **Authentication (Login/Signup)** – *Coming soon* -->
 
 ---
 
+## 🛠️ Tech Stack
 
+| Frontend     | Backend     | Database     | Others                            |
+|--------------|-------------|--------------|-----------------------------------|
+| React (Vite) | Express.js  | MongoDB Atlas| Axios, React Router, Bootstrap    |
+| React Hooks  | Node.js     | Mongoose     | Cloudinary, Multer, Dotenv, CORS  |
 
+---
 
 ## 🚀 Getting Started
 
 ### 📦 1. Clone the Repository
+
 ```bash
 git clone https://github.com/kushansm/book-inventory-app.git
 cd book-inventory-app
 
 
-Copy
+🔧 2. Setup Backend
 cd backend
 npm install
-touch .env
-Add the following to .env:
+Create .env file:
+env
+Always show details
 
-
-
-Copy
+Then add these to env file
 PORT=5000
 MONGO_URI=your_mongodb_connection_string
 JWT_SECRET=your_jwt_secret
-CLOUDINARY_CLOUD_NAME=your_cloud_name
-CLOUDINARY_API_KEY=your_api_key
-CLOUDINARY_API_SECRET=your_api_secret
-Then start the server:
 
 
 
 
+then run
+npm run dev
+This will run the backend on http://localhost:5000
 
+🌐 3. Setup Frontend
+cd ../frontend
+npm install
+▶️ Start the Frontend App
+npm run dev
+Visit the frontend at: http://localhost:5173
+
+
+📂 Folder Structure
+
+book-inventory-app/
+├── backend/
+│   ├── controllers/
+│   ├── models/
+│   ├── routes/
+│   ├── uploads/
+│   ├── .env
+│   └── server.js
+└── frontend/
+    ├── components/
+    ├── pages/
+    ├── App.jsx
+    └── main.jsx
 🧑‍💻 Author
 Made with ❤️ by Kushan
+
+Want to contribute? Feel free to fork and open a pull request!
 
