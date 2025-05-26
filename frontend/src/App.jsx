@@ -1,14 +1,12 @@
 // App.jsx
 import { Routes, Route } from 'react-router-dom';
 import BookList from './pages/BookList';
-import AddBook from './pages/AddBook';
 import EditBook from './pages/EditBook';
 
 function App() {
   return (
     <Routes>
       <Route path="/" element={<BookList />} />
-      <Route path="/add" element={<AddBook />} />
       <Route path="/edit/:id" element={<EditBook />} />
     </Routes>
   );

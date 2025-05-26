@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import AddBookModal from '../components/AddBookModal';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
@@ -6,6 +7,7 @@ function BookList() {
   const [books, setBooks] = useState([]);
   const [searchId, setSearchId] = useState('');
   const [filteredBooks, setFilteredBooks] = useState([]);
+  const [showAddModal, setShowAddModal] = useState(false); // <-- modal visibility state
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -22,17 +24,17 @@ function BookList() {
     }
   };
 
+  // This will be called from AddBookModal after user submits the form
   const addNewBook = async (newBook) => {
-  try {
-    const res = await axios.post('http://localhost:5000/api/books', newBook);
-    console.log('Book added:', res.data);
-
-    // Optionally fetch updated list
-    fetchBooks(); // if you want to refresh the list after adding
-  } catch (err) {
-    console.error('Failed to add book:', err.response?.data || err.message);
-  }
-};
+    try {
+      const res = await axios.post('http://localhost:5000/api/books', newBook);
+      console.log('Book added:', res.data);
+      fetchBooks(); // refresh list
+      setShowAddModal(false); // close modal after add
+    } catch (err) {
+      console.error('Failed to add book:', err.response?.data || err.message);
+    }
+  };
 
   const handleSearch = async () => {
     if (searchId.trim() === '') {
@@ -57,13 +59,23 @@ function BookList() {
 
   return (
     <div className="container py-4">
-        <div className="d-flex justify-content-between align-items-center mb-4">
-            <h1 className="text-center flex-grow-1 m-0">📚 Book Inventory</h1>
-            <button className="btn btn-primary ms-3" onClick={addNewBook}>
-             Add New Book +
-            </button>
-            </div>
+      <div className="d-flex justify-content-between align-items-center mb-4">
+        <h1 className="text-center flex-grow-1 m-0">📚 Book Inventory</h1>
+        <button
+          className="btn btn-primary ms-3"
+          onClick={() => setShowAddModal(true)} // open modal on click
+        >
+          Add New Book +
+        </button>
+      </div>
 
+      {/* Render AddBookModal and pass props */}
+      {showAddModal && (
+        <AddBookModal
+          onClose={() => setShowAddModal(false)}
+          onAddBook={addNewBook}
+        />
+      )}
 
       <div className="input-group mb-4">
         <input
@@ -84,7 +96,7 @@ function BookList() {
             <th>ID</th>
             <th>Title</th>
             <th>Author</th>
-             <th>Created Date</th>
+            <th>Created Date</th>
             <th>Price</th>
             <th style={{ width: '100px' }}>Actions</th>
           </tr>
@@ -95,7 +107,7 @@ function BookList() {
               <td>{book._id}</td>
               <td>{book.title}</td>
               <td>{book.author}</td>
-              <td>{book.createdAt}</td>
+              <td>{new Date(book.createdAt).toLocaleDateString()}</td>
               <td>${book.price}</td>
               <td>
                 <button
@@ -115,7 +127,7 @@ function BookList() {
           ))}
           {filteredBooks.length === 0 && (
             <tr>
-              <td colSpan="5" className="text-center text-muted">
+              <td colSpan="6" className="text-center text-muted">
                 No books found
               </td>
             </tr>
