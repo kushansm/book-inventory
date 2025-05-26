@@ -22,6 +22,18 @@ function BookList() {
     }
   };
 
+  const addNewBook = async (newBook) => {
+  try {
+    const res = await axios.post('http://localhost:5000/api/books', newBook);
+    console.log('Book added:', res.data);
+
+    // Optionally fetch updated list
+    fetchBooks(); // if you want to refresh the list after adding
+  } catch (err) {
+    console.error('Failed to add book:', err.response?.data || err.message);
+  }
+};
+
   const handleSearch = async () => {
     if (searchId.trim() === '') {
       setFilteredBooks(books);
@@ -45,7 +57,13 @@ function BookList() {
 
   return (
     <div className="container py-4">
-      <h1 className="text-center mb-4">📚 Book Inventory</h1>
+        <div className="d-flex justify-content-between align-items-center mb-4">
+            <h1 className="text-center flex-grow-1 m-0">📚 Book Inventory</h1>
+            <button className="btn btn-primary ms-3" onClick={addNewBook}>
+             Add New Book +
+            </button>
+            </div>
+
 
       <div className="input-group mb-4">
         <input
@@ -66,6 +84,7 @@ function BookList() {
             <th>ID</th>
             <th>Title</th>
             <th>Author</th>
+             <th>Created Date</th>
             <th>Price</th>
             <th style={{ width: '100px' }}>Actions</th>
           </tr>
@@ -76,6 +95,7 @@ function BookList() {
               <td>{book._id}</td>
               <td>{book.title}</td>
               <td>{book.author}</td>
+              <td>{book.createdAt}</td>
               <td>${book.price}</td>
               <td>
                 <button
