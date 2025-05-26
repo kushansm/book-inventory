@@ -13,7 +13,11 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-// Basic route
+// Route setup
+const bookRoutes = require('./routes/bookRoutes');
+app.use('/api/books', bookRoutes);
+
+// Test route
 app.get('/', (req, res) => {
   res.send('API is running...');
 });
