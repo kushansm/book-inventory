@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import AddBookModal from '../components/AddBookModal';
+import EditBookModal from '../components/EditBookModal';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
@@ -7,7 +8,9 @@ function BookList() {
   const [books, setBooks] = useState([]);
   const [searchId, setSearchId] = useState('');
   const [filteredBooks, setFilteredBooks] = useState([]);
-  const [showAddModal, setShowAddModal] = useState(false); // <-- modal visibility state
+  const [showAddModal, setShowAddModal] = useState(false); 
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [selectedBook, setSelectedBook] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -24,7 +27,6 @@ function BookList() {
     }
   };
 
-  // This will be called from AddBookModal after user submits the form
   const addNewBook = async (newBook) => {
     try {
       const res = await axios.post('http://localhost:5000/api/books', newBook);
@@ -49,9 +51,23 @@ function BookList() {
     }
   };
 
-  const handleEdit = (id) => {
-    navigate(`/edit/${id}`);
-  };
+const handleEdit = (id) => {
+  const bookToEdit = books.find((b) => b._id === id);
+  setSelectedBook(bookToEdit);
+  setShowEditModal(true);
+};
+
+const handleUpdateBook = async (updatedBook) => {
+  try {
+    await axios.put(`http://localhost:5000/api/books/${updatedBook._id}`, updatedBook);
+    fetchBooks();
+    setShowEditModal(false);
+  } catch (err) {
+    console.error('Failed to update book:', err.response?.data || err.message);
+  }
+};
+
+
 
   const handleDelete = (id) => {
     navigate(`/delete/${id}`);
@@ -69,13 +85,21 @@ function BookList() {
         </button>
       </div>
 
-      {/* Render AddBookModal and pass props */}
       {showAddModal && (
         <AddBookModal
           onClose={() => setShowAddModal(false)}
           onAddBook={addNewBook}
         />
       )}
+
+      {showEditModal && selectedBook && (
+        <EditBookModal
+        book={selectedBook}
+        onClose={() => setShowEditModal(false)}
+        onUpdate={handleUpdateBook}
+        />
+      )}
+
 
       <div className="input-group mb-4">
         <input
