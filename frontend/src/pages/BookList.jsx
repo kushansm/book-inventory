@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import AddBookModal from '../components/AddBookModal';
 import EditBookModal from '../components/EditBookModal';
+import ConfirmDeleteModal from '../components/ConfirmDeleteModal';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
@@ -11,6 +12,8 @@ function BookList() {
   const [showAddModal, setShowAddModal] = useState(false); 
   const [showEditModal, setShowEditModal] = useState(false);
   const [selectedBook, setSelectedBook] = useState(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [bookToDelete, setBookToDelete] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -67,11 +70,25 @@ const handleUpdateBook = async (updatedBook) => {
   }
 };
 
+const confirmDeleteBook = async (id) => {
+  try {
+    await axios.delete(`http://localhost:5000/api/books/${id}`);
+    fetchBooks();
+    setShowDeleteModal(false);
+  } catch (err) {
+    console.error('Failed to delete book:', err.response?.data || err.message);
+  }
+};
+
+
 
 
   const handleDelete = (id) => {
-    navigate(`/delete/${id}`);
-  };
+  const book = books.find(b => b._id === id);
+  setBookToDelete(book);
+  setShowDeleteModal(true);
+};
+
 
   return (
     <div className="container py-4">
@@ -99,6 +116,15 @@ const handleUpdateBook = async (updatedBook) => {
         onUpdate={handleUpdateBook}
         />
       )}
+
+      {showDeleteModal && bookToDelete && (
+        <ConfirmDeleteModal
+        book={bookToDelete}
+        onClose={() => setShowDeleteModal(false)}
+        onConfirm={confirmDeleteBook}
+        />
+      )}
+
 
 
       <div className="input-group mb-4">
