@@ -1,5 +1,5 @@
 
-# 📚 Book Inventory Management System
+# 📚 Book Hub- A Book Inventory Management System
 
 A full-stack **MERN** (MongoDB, Express.js, React.js, Node.js) application to manage a book inventory.
 
